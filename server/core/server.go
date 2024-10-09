@@ -13,29 +13,29 @@ type server interface {
 }
 
 func RunWindowsServer() {
-	if global.GVA_CONFIG.System.UseMultipoint || global.GVA_CONFIG.System.UseRedis {
+	if global.GvaConfig.System.UseMultipoint || global.GvaConfig.System.UseRedis {
 		// 初始化redis服务
 		initialize.Redis()
 		initialize.RedisList()
 	}
 
-	if global.GVA_CONFIG.System.UseMongo {
+	if global.GvaConfig.System.UseMongo {
 		err := initialize.Mongo.Initialization()
 		if err != nil {
 			zap.L().Error(fmt.Sprintf("%+v", err))
 		}
 	}
 	// 从db加载jwt数据
-	if global.GVA_DB != nil {
+	if global.GvaDb != nil {
 		system.LoadAll()
 	}
 
 	Router := initialize.Routers()
 
-	address := fmt.Sprintf(":%d", global.GVA_CONFIG.System.Addr)
+	address := fmt.Sprintf(":%d", global.GvaConfig.System.Addr)
 	s := initServer(address, Router)
 
-	global.GVA_LOG.Info("server run success on ", zap.String("address", address))
+	global.GvaLog.Info("server run success on ", zap.String("address", address))
 
 	fmt.Printf(`
 	欢迎使用 gin-vue-admin
@@ -51,5 +51,5 @@ func RunWindowsServer() {
 	** 版权持有公司：北京翻转极光科技有限责任公司 **
 	** 剔除授权标识需购买商用授权：https://gin-vue-admin.com/empower/index.html **
 `, address)
-	global.GVA_LOG.Error(s.ListenAndServe().Error())
+	global.GvaLog.Error(s.ListenAndServe().Error())
 }

@@ -6,6 +6,6 @@ import (
 )
 
 func init() {
-	global.GVA_CONFIG.AutoCode.Root, _ = filepath.Abs("../../../")
-	global.GVA_CONFIG.AutoCode.Server = "server"
+	global.GvaConfig.AutoCode.Root, _ = filepath.Abs("../../../")
+	global.GvaConfig.AutoCode.Server = "server"
 }

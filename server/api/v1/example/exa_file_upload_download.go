@@ -26,13 +26,13 @@ func (b *FileUploadAndDownloadApi) UploadFile(c *gin.Context) {
 	noSave := c.DefaultQuery("noSave", "0")
 	_, header, err := c.Request.FormFile("file")
 	if err != nil {
-		global.GVA_LOG.Error("接收文件失败!", zap.Error(err))
+		global.GvaLog.Error("接收文件失败!", zap.Error(err))
 		response.FailWithMessage("接收文件失败", c)
 		return
 	}
 	file, err = fileUploadAndDownloadService.UploadFile(header, noSave) // 文件上传后拿到文件路径
 	if err != nil {
-		global.GVA_LOG.Error("上传文件失败!", zap.Error(err))
+		global.GvaLog.Error("上传文件失败!", zap.Error(err))
 		response.FailWithMessage("上传文件失败", c)
 		return
 	}
@@ -49,7 +49,7 @@ func (b *FileUploadAndDownloadApi) EditFileName(c *gin.Context) {
 	}
 	err = fileUploadAndDownloadService.EditFileName(file)
 	if err != nil {
-		global.GVA_LOG.Error("编辑失败!", zap.Error(err))
+		global.GvaLog.Error("编辑失败!", zap.Error(err))
 		response.FailWithMessage("编辑失败", c)
 		return
 	}
@@ -72,7 +72,7 @@ func (b *FileUploadAndDownloadApi) DeleteFile(c *gin.Context) {
 		return
 	}
 	if err := fileUploadAndDownloadService.DeleteFile(file); err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		global.GvaLog.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败", c)
 		return
 	}
@@ -97,7 +97,7 @@ func (b *FileUploadAndDownloadApi) GetFileList(c *gin.Context) {
 	}
 	list, total, err := fileUploadAndDownloadService.GetFileRecordInfoList(pageInfo)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		global.GvaLog.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 		return
 	}
@@ -125,7 +125,7 @@ func (b *FileUploadAndDownloadApi) ImportURL(c *gin.Context) {
 		return
 	}
 	if err := fileUploadAndDownloadService.ImportURL(&file); err != nil {
-		global.GVA_LOG.Error("导入URL失败!", zap.Error(err))
+		global.GvaLog.Error("导入URL失败!", zap.Error(err))
 		response.FailWithMessage("导入URL失败", c)
 		return
 	}

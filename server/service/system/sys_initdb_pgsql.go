@@ -30,15 +30,15 @@ func (h PgsqlInitHandler) WriteConfig(ctx context.Context) error {
 	if !ok {
 		return errors.New("postgresql config invalid")
 	}
-	global.GVA_CONFIG.System.DbType = "pgsql"
-	global.GVA_CONFIG.Pgsql = c
-	global.GVA_CONFIG.JWT.SigningKey = uuid.Must(uuid.NewV4()).String()
-	cs := utils.StructToMap(global.GVA_CONFIG)
+	global.GvaConfig.System.DbType = "pgsql"
+	global.GvaConfig.Pgsql = c
+	global.GvaConfig.JWT.SigningKey = uuid.Must(uuid.NewV4()).String()
+	cs := utils.StructToMap(global.GvaConfig)
 	for k, v := range cs {
-		global.GVA_VP.Set(k, v)
+		global.GvaVp.Set(k, v)
 	}
-	global.GVA_ACTIVE_DBNAME = &c.Dbname
-	return global.GVA_VP.WriteConfig()
+	global.GvaActiveDbname = &c.Dbname
+	return global.GvaVp.WriteConfig()
 }
 
 // EnsureDB 创建数据库并初始化 pg
@@ -66,7 +66,7 @@ func (h PgsqlInitHandler) EnsureDB(ctx context.Context, conf *request.InitDB) (n
 	}), &gorm.Config{DisableForeignKeyConstraintWhenMigrating: true}); err != nil {
 		return ctx, err
 	}
-	global.GVA_CONFIG.AutoCode.Root, _ = filepath.Abs("..")
+	global.GvaConfig.AutoCode.Root, _ = filepath.Abs("..")
 	next = context.WithValue(next, "db", db)
 	return next, err
 }

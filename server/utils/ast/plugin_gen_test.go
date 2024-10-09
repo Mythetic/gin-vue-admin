@@ -24,7 +24,7 @@ func TestPluginGenModel_Injection(t *testing.T) {
 			name: "测试 GvaUser 结构体注入",
 			fields: fields{
 				Type:        TypePluginGen,
-				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "gen", "main.go"),
+				Path:        filepath.Join(global.GvaConfig.AutoCode.Root, global.GvaConfig.AutoCode.Server, "plugin", "gva", "gen", "main.go"),
 				ImportPath:  `"github.com/flipped-aurora/gin-vue-admin/server/plugin/gva/model"`,
 				PackageName: "model",
 				StructName:  "User",
@@ -35,7 +35,7 @@ func TestPluginGenModel_Injection(t *testing.T) {
 			name: "测试 GvaUser 结构体注入",
 			fields: fields{
 				Type:        TypePluginGen,
-				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "gen", "main.go"),
+				Path:        filepath.Join(global.GvaConfig.AutoCode.Root, global.GvaConfig.AutoCode.Server, "plugin", "gva", "gen", "main.go"),
 				ImportPath:  `"github.com/flipped-aurora/gin-vue-admin/server/plugin/gva/model"`,
 				PackageName: "model",
 				StructName:  "User",
@@ -84,7 +84,7 @@ func TestPluginGenModel_Rollback(t *testing.T) {
 			name: "测试 GvaUser 回滚",
 			fields: fields{
 				Type:        TypePluginGen,
-				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "gen", "main.go"),
+				Path:        filepath.Join(global.GvaConfig.AutoCode.Root, global.GvaConfig.AutoCode.Server, "plugin", "gva", "gen", "main.go"),
 				ImportPath:  `"github.com/flipped-aurora/gin-vue-admin/server/plugin/gva/model"`,
 				PackageName: "model",
 				StructName:  "User",
@@ -95,7 +95,7 @@ func TestPluginGenModel_Rollback(t *testing.T) {
 			name: "测试 GvaUser 回滚",
 			fields: fields{
 				Type:        TypePluginGen,
-				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "gen", "main.go"),
+				Path:        filepath.Join(global.GvaConfig.AutoCode.Root, global.GvaConfig.AutoCode.Server, "plugin", "gva", "gen", "main.go"),
 				ImportPath:  `"github.com/flipped-aurora/gin-vue-admin/server/plugin/gva/model"`,
 				PackageName: "model",
 				StructName:  "User",

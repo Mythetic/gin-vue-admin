@@ -7,7 +7,7 @@ import (
 
 // 导出模板 结构体  SysExportTemplate
 type SysExportTemplate struct {
-	global.GVA_MODEL
+	global.GvaModel
 	DBName       string         `json:"dbName" form:"dbName" gorm:"column:db_name;comment:数据库名称;"`               //数据库名称
 	Name         string         `json:"name" form:"name" gorm:"column:name;comment:模板名称;"`                       //模板名称
 	TableName    string         `json:"tableName" form:"tableName" gorm:"column:table_name;comment:表名称;"`        //表名称
@@ -20,7 +20,7 @@ type SysExportTemplate struct {
 }
 
 type JoinTemplate struct {
-	global.GVA_MODEL
+	global.GvaModel
 	TemplateID string `json:"templateID" form:"templateID" gorm:"column:template_id;comment:模板标识"`
 	JOINS      string `json:"joins" form:"joins" gorm:"column:joins;comment:关联"`
 	Table      string `json:"table" form:"table" gorm:"column:table;comment:关联表"`
@@ -32,7 +32,7 @@ func (JoinTemplate) TableName() string {
 }
 
 type Condition struct {
-	global.GVA_MODEL
+	global.GvaModel
 	TemplateID string `json:"templateID" form:"templateID" gorm:"column:template_id;comment:模板标识"`
 	From       string `json:"from" form:"from" gorm:"column:from;comment:条件取的key"`
 	Column     string `json:"column" form:"column" gorm:"column:column;comment:作为查询条件的字段"`

@@ -78,14 +78,14 @@ func (s *autoCodePlugin) Install(file *multipart.FileHeader) (web, server int, e
 	}
 
 	if len(serverPlugin) != 0 {
-		err = installation(serverPlugin, global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.Server)
+		err = installation(serverPlugin, global.GvaConfig.AutoCode.Server, global.GvaConfig.AutoCode.Server)
 		if err != nil {
 			return webIndex, serverIndex, err
 		}
 	}
 
 	if len(webPlugin) != 0 {
-		err = installation(webPlugin, global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.Web)
+		err = installation(webPlugin, global.GvaConfig.AutoCode.Server, global.GvaConfig.AutoCode.Web)
 		if err != nil {
 			return webIndex, serverIndex, err
 		}
@@ -102,8 +102,8 @@ func installation(path string, formPath string, toPath string) error {
 	}
 	name := arr[ln-3]
 
-	var form = filepath.Join(global.GVA_CONFIG.AutoCode.Root, formPath, path)
-	var to = filepath.Join(global.GVA_CONFIG.AutoCode.Root, toPath, "plugin")
+	var form = filepath.Join(global.GvaConfig.AutoCode.Root, formPath, path)
+	var to = filepath.Join(global.GvaConfig.AutoCode.Root, toPath, "plugin")
 	_, err := os.Stat(to + name)
 	if err == nil {
 		zap.L().Error("autoPath 已存在同名插件，请自行手动安装", zap.String("to", to))
@@ -138,8 +138,8 @@ func (s *autoCodePlugin) PubPlug(plugName string) (zipPath string, err error) {
 	// 防止路径穿越
 	plugName = filepath.Clean(plugName)
 
-	webPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Web, "plugin", plugName)
-	serverPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", plugName)
+	webPath := filepath.Join(global.GvaConfig.AutoCode.Root, global.GvaConfig.AutoCode.Web, "plugin", plugName)
+	serverPath := filepath.Join(global.GvaConfig.AutoCode.Root, global.GvaConfig.AutoCode.Server, "plugin", plugName)
 	// 创建一个新的zip文件
 
 	// 判断目录是否存在
@@ -178,11 +178,11 @@ func (s *autoCodePlugin) PubPlug(plugName string) (zipPath string, err error) {
 		return
 	}
 
-	return filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, fileName), nil
+	return filepath.Join(global.GvaConfig.AutoCode.Root, global.GvaConfig.AutoCode.Server, fileName), nil
 }
 
 func (s *autoCodePlugin) InitMenu(menuInfo request.InitMenu) (err error) {
-	menuPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", menuInfo.PlugName, "initialize", "menu.go")
+	menuPath := filepath.Join(global.GvaConfig.AutoCode.Root, global.GvaConfig.AutoCode.Server, "plugin", menuInfo.PlugName, "initialize", "menu.go")
 	src, err := os.ReadFile(menuPath)
 	if err != nil {
 		fmt.Println(err)
@@ -207,7 +207,7 @@ func (s *autoCodePlugin) InitMenu(menuInfo request.InitMenu) (err error) {
 		},
 	}
 
-	err = global.GVA_DB.Find(&menus, "id in (?)", menuInfo.Menus).Error
+	err = global.GvaDb.Find(&menus, "id in (?)", menuInfo.Menus).Error
 	if err != nil {
 		return err
 	}
@@ -224,7 +224,7 @@ func (s *autoCodePlugin) InitMenu(menuInfo request.InitMenu) (err error) {
 }
 
 func (s *autoCodePlugin) InitAPI(apiInfo request.InitApi) (err error) {
-	apiPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", apiInfo.PlugName, "initialize", "api.go")
+	apiPath := filepath.Join(global.GvaConfig.AutoCode.Root, global.GvaConfig.AutoCode.Server, "plugin", apiInfo.PlugName, "initialize", "api.go")
 	src, err := os.ReadFile(apiPath)
 	if err != nil {
 		fmt.Println(err)
@@ -233,7 +233,7 @@ func (s *autoCodePlugin) InitAPI(apiInfo request.InitApi) (err error) {
 	astFile, err := parser.ParseFile(fileSet, "", src, 0)
 	arrayAst := ast.FindArray(astFile, "model", "SysApi")
 	var apis []system.SysApi
-	err = global.GVA_DB.Find(&apis, "id in (?)", apiInfo.APIs).Error
+	err = global.GvaDb.Find(&apis, "id in (?)", apiInfo.APIs).Error
 	if err != nil {
 		return err
 	}

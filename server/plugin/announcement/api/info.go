@@ -31,7 +31,7 @@ func (a *info) CreateInfo(c *gin.Context) {
 	}
 	err = serviceInfo.CreateInfo(&info)
 	if err != nil {
-		global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		global.GvaLog.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
 		return
 	}
@@ -51,7 +51,7 @@ func (a *info) DeleteInfo(c *gin.Context) {
 	ID := c.Query("ID")
 	err := serviceInfo.DeleteInfo(ID)
 	if err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		global.GvaLog.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败", c)
 		return
 	}
@@ -69,7 +69,7 @@ func (a *info) DeleteInfo(c *gin.Context) {
 func (a *info) DeleteInfoByIds(c *gin.Context) {
 	IDs := c.QueryArray("IDs[]")
 	if err := serviceInfo.DeleteInfoByIds(IDs); err != nil {
-		global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
+		global.GvaLog.Error("批量删除失败!", zap.Error(err))
 		response.FailWithMessage("批量删除失败", c)
 		return
 	}
@@ -94,7 +94,7 @@ func (a *info) UpdateInfo(c *gin.Context) {
 	}
 	err = serviceInfo.UpdateInfo(info)
 	if err != nil {
-		global.GVA_LOG.Error("更新失败!", zap.Error(err))
+		global.GvaLog.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败", c)
 		return
 	}
@@ -114,7 +114,7 @@ func (a *info) FindInfo(c *gin.Context) {
 	ID := c.Query("ID")
 	reinfo, err := serviceInfo.GetInfo(ID)
 	if err != nil {
-		global.GVA_LOG.Error("查询失败!", zap.Error(err))
+		global.GvaLog.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 		return
 	}
@@ -139,7 +139,7 @@ func (a *info) GetInfoList(c *gin.Context) {
 	}
 	list, total, err := serviceInfo.GetInfoInfoList(pageInfo)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		global.GvaLog.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 		return
 	}
@@ -162,7 +162,7 @@ func (a *info) GetInfoDataSource(c *gin.Context) {
 	// 此接口为获取数据源定义的数据
 	dataSource, err := serviceInfo.GetInfoDataSource()
 	if err != nil {
-		global.GVA_LOG.Error("查询失败!", zap.Error(err))
+		global.GvaLog.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 		return
 	}

@@ -22,13 +22,13 @@ func bizPluginV1(group ...*gin.RouterGroup) {
 	public := group[1]
 	//  添加跟角色挂钩权限的插件 示例 本地示例模式于在线仓库模式注意上方的import 可以自行切换 效果相同
 	PluginInit(private, email.CreateEmailPlug(
-		global.GVA_CONFIG.Email.To,
-		global.GVA_CONFIG.Email.From,
-		global.GVA_CONFIG.Email.Host,
-		global.GVA_CONFIG.Email.Secret,
-		global.GVA_CONFIG.Email.Nickname,
-		global.GVA_CONFIG.Email.Port,
-		global.GVA_CONFIG.Email.IsSSL,
+		global.GvaConfig.Email.To,
+		global.GvaConfig.Email.From,
+		global.GvaConfig.Email.Host,
+		global.GvaConfig.Email.Secret,
+		global.GvaConfig.Email.Nickname,
+		global.GvaConfig.Email.Port,
+		global.GvaConfig.Email.IsSSL,
 	))
 	holder(public, private)
 }

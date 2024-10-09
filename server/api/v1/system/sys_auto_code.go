@@ -26,7 +26,7 @@ func (autoApi *AutoCodeApi) GetDB(c *gin.Context) {
 	businessDB := c.Query("businessDB")
 	dbs, err := autoCodeService.Database(businessDB).GetDB(businessDB)
 	var dbList []map[string]interface{}
-	for _, db := range global.GVA_CONFIG.DBList {
+	for _, db := range global.GvaConfig.DBList {
 		var item = make(map[string]interface{})
 		item["aliasName"] = db.AliasName
 		item["dbName"] = db.Dbname
@@ -35,7 +35,7 @@ func (autoApi *AutoCodeApi) GetDB(c *gin.Context) {
 		dbList = append(dbList, item)
 	}
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		global.GvaLog.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {
 		response.OkWithDetailed(gin.H{"dbs": dbs, "dbList": dbList}, "获取成功", c)
@@ -54,9 +54,9 @@ func (autoApi *AutoCodeApi) GetTables(c *gin.Context) {
 	dbName := c.Query("dbName")
 	businessDB := c.Query("businessDB")
 	if dbName == "" {
-		dbName = *global.GVA_ACTIVE_DBNAME
+		dbName = *global.GvaActiveDbname
 		if businessDB != "" {
-			for _, db := range global.GVA_CONFIG.DBList {
+			for _, db := range global.GvaConfig.DBList {
 				if db.AliasName == businessDB {
 					dbName = db.Dbname
 				}
@@ -66,7 +66,7 @@ func (autoApi *AutoCodeApi) GetTables(c *gin.Context) {
 
 	tables, err := autoCodeService.Database(businessDB).GetTables(businessDB, dbName)
 	if err != nil {
-		global.GVA_LOG.Error("查询table失败!", zap.Error(err))
+		global.GvaLog.Error("查询table失败!", zap.Error(err))
 		response.FailWithMessage("查询table失败", c)
 	} else {
 		response.OkWithDetailed(gin.H{"tables": tables}, "获取成功", c)
@@ -85,9 +85,9 @@ func (autoApi *AutoCodeApi) GetColumn(c *gin.Context) {
 	businessDB := c.Query("businessDB")
 	dbName := c.Query("dbName")
 	if dbName == "" {
-		dbName = *global.GVA_ACTIVE_DBNAME
+		dbName = *global.GvaActiveDbname
 		if businessDB != "" {
-			for _, db := range global.GVA_CONFIG.DBList {
+			for _, db := range global.GvaConfig.DBList {
 				if db.AliasName == businessDB {
 					dbName = db.Dbname
 				}
@@ -97,7 +97,7 @@ func (autoApi *AutoCodeApi) GetColumn(c *gin.Context) {
 	tableName := c.Query("tableName")
 	columns, err := autoCodeService.Database(businessDB).GetColumn(businessDB, tableName, dbName)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		global.GvaLog.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {
 		response.OkWithDetailed(gin.H{"columns": columns}, "获取成功", c)
@@ -110,7 +110,7 @@ func (autoApi *AutoCodeApi) LLMAuto(c *gin.Context) {
 	params := make(map[string]string)
 	params["prompt"] = prompt
 	params["mode"] = mode
-	path := strings.ReplaceAll(global.GVA_CONFIG.AutoCode.AiPath, "{FUNC}", "api/chat/ai")
+	path := strings.ReplaceAll(global.GvaConfig.AutoCode.AiPath, "{FUNC}", "api/chat/ai")
 	res, err := request.HttpRequest(
 		path,
 		"POST",
@@ -119,7 +119,7 @@ func (autoApi *AutoCodeApi) LLMAuto(c *gin.Context) {
 		nil,
 	)
 	if err != nil {
-		global.GVA_LOG.Error("大模型生成失败!", zap.Error(err))
+		global.GvaLog.Error("大模型生成失败!", zap.Error(err))
 		response.FailWithMessage("大模型生成失败"+err.Error(), c)
 		return
 	}
@@ -127,19 +127,19 @@ func (autoApi *AutoCodeApi) LLMAuto(c *gin.Context) {
 	b, err := io.ReadAll(res.Body)
 	defer res.Body.Close()
 	if err != nil {
-		global.GVA_LOG.Error("大模型生成失败!", zap.Error(err))
+		global.GvaLog.Error("大模型生成失败!", zap.Error(err))
 		response.FailWithMessage("大模型生成失败"+err.Error(), c)
 		return
 	}
 	err = json.Unmarshal(b, &resStruct)
 	if err != nil {
-		global.GVA_LOG.Error("大模型生成失败!", zap.Error(err))
+		global.GvaLog.Error("大模型生成失败!", zap.Error(err))
 		response.FailWithMessage("大模型生成失败"+err.Error(), c)
 		return
 	}
 
 	if resStruct.Code == 7 {
-		global.GVA_LOG.Error("大模型生成失败!"+resStruct.Msg, zap.Error(err))
+		global.GvaLog.Error("大模型生成失败!"+resStruct.Msg, zap.Error(err))
 		response.FailWithMessage("大模型生成失败"+resStruct.Msg, c)
 		return
 	}

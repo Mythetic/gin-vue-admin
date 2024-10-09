@@ -5,7 +5,7 @@ import (
 )
 
 type SysAutoCodePackage struct {
-	global.GVA_MODEL
+	global.GvaModel
 	Desc        string `json:"desc" gorm:"comment:描述"`
 	Label       string `json:"label" gorm:"comment:展示名"`
 	Template    string `json:"template"  gorm:"comment:模版"`

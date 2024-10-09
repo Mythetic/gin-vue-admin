@@ -57,14 +57,14 @@ func JWTAuth() gin.HandlerFunc {
 		//}
 		c.Set("claims", claims)
 		if claims.ExpiresAt.Unix()-time.Now().Unix() < claims.BufferTime {
-			dr, _ := utils.ParseDuration(global.GVA_CONFIG.JWT.ExpiresTime)
+			dr, _ := utils.ParseDuration(global.GvaConfig.JWT.ExpiresTime)
 			claims.ExpiresAt = jwt.NewNumericDate(time.Now().Add(dr))
 			newToken, _ := j.CreateTokenByOldToken(token, *claims)
 			newClaims, _ := j.ParseToken(newToken)
 			c.Header("new-token", newToken)
 			c.Header("new-expires-at", strconv.FormatInt(newClaims.ExpiresAt.Unix(), 10))
 			utils.SetToken(c, newToken, int(dr.Seconds()))
-			if global.GVA_CONFIG.System.UseMultipoint {
+			if global.GvaConfig.System.UseMultipoint {
 				// 记录新的活跃jwt
 				_ = jwtService.SetRedisJWT(newToken, newClaims.Username)
 			}

@@ -18,9 +18,9 @@ const (
 )
 
 type Server struct {
-	Os   Os   `json:"os"`
-	Cpu  Cpu  `json:"cpu"`
-	Ram  Ram  `json:"ram"`
+	Os   Os     `json:"os"`
+	Cpu  Cpu    `json:"cpu"`
+	Ram  Ram    `json:"ram"`
 	Disk []Disk `json:"disk"`
 }
 
@@ -45,11 +45,11 @@ type Ram struct {
 
 type Disk struct {
 	MountPoint  string `json:"mountPoint"`
-	UsedMB      int `json:"usedMb"`
-	UsedGB      int `json:"usedGb"`
-	TotalMB     int `json:"totalMb"`
-	TotalGB     int `json:"totalGb"`
-	UsedPercent int `json:"usedPercent"`
+	UsedMB      int    `json:"usedMb"`
+	UsedGB      int    `json:"usedGb"`
+	TotalMB     int    `json:"totalMb"`
+	TotalGB     int    `json:"totalGb"`
+	UsedPercent int    `json:"usedPercent"`
 }
 
 //@author: [SliverHorn](https://github.com/SliverHorn)
@@ -107,8 +107,8 @@ func InitRAM() (r Ram, err error) {
 //@return: d Disk, err error
 
 func InitDisk() (d []Disk, err error) {
-	for i := range global.GVA_CONFIG.DiskList {
-		mp := global.GVA_CONFIG.DiskList[i].MountPoint
+	for i := range global.GvaConfig.DiskList {
+		mp := global.GvaConfig.DiskList[i].MountPoint
 		if u, err := disk.Usage(mp); err != nil {
 			return d, err
 		} else {

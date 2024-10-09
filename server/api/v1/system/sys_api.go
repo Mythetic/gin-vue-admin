@@ -38,7 +38,7 @@ func (s *SystemApiApi) CreateApi(c *gin.Context) {
 	}
 	err = apiService.CreateApi(api)
 	if err != nil {
-		global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		global.GvaLog.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
 		return
 	}
@@ -56,7 +56,7 @@ func (s *SystemApiApi) CreateApi(c *gin.Context) {
 func (s *SystemApiApi) SyncApi(c *gin.Context) {
 	newApis, deleteApis, ignoreApis, err := apiService.SyncApi()
 	if err != nil {
-		global.GVA_LOG.Error("同步失败!", zap.Error(err))
+		global.GvaLog.Error("同步失败!", zap.Error(err))
 		response.FailWithMessage("同步失败", c)
 		return
 	}
@@ -78,7 +78,7 @@ func (s *SystemApiApi) SyncApi(c *gin.Context) {
 func (s *SystemApiApi) GetApiGroups(c *gin.Context) {
 	groups, apiGroupMap, err := apiService.GetApiGroups()
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		global.GvaLog.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 		return
 	}
@@ -105,7 +105,7 @@ func (s *SystemApiApi) IgnoreApi(c *gin.Context) {
 	}
 	err = apiService.IgnoreApi(ignoreApi)
 	if err != nil {
-		global.GVA_LOG.Error("忽略失败!", zap.Error(err))
+		global.GvaLog.Error("忽略失败!", zap.Error(err))
 		response.FailWithMessage("忽略失败", c)
 		return
 	}
@@ -129,7 +129,7 @@ func (s *SystemApiApi) EnterSyncApi(c *gin.Context) {
 	}
 	err = apiService.EnterSyncApi(syncApi)
 	if err != nil {
-		global.GVA_LOG.Error("忽略失败!", zap.Error(err))
+		global.GvaLog.Error("忽略失败!", zap.Error(err))
 		response.FailWithMessage("忽略失败", c)
 		return
 	}
@@ -152,14 +152,14 @@ func (s *SystemApiApi) DeleteApi(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = utils.Verify(api.GVA_MODEL, utils.IdVerify)
+	err = utils.Verify(api.GvaModel, utils.IdVerify)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
 	err = apiService.DeleteApi(api)
 	if err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		global.GvaLog.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败", c)
 		return
 	}
@@ -189,7 +189,7 @@ func (s *SystemApiApi) GetApiList(c *gin.Context) {
 	}
 	list, total, err := apiService.GetAPIInfoList(pageInfo.SysApi, pageInfo.PageInfo, pageInfo.OrderKey, pageInfo.Desc)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		global.GvaLog.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 		return
 	}
@@ -224,7 +224,7 @@ func (s *SystemApiApi) GetApiById(c *gin.Context) {
 	}
 	api, err := apiService.GetApiById(idInfo.ID)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		global.GvaLog.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 		return
 	}
@@ -254,7 +254,7 @@ func (s *SystemApiApi) UpdateApi(c *gin.Context) {
 	}
 	err = apiService.UpdateApi(api)
 	if err != nil {
-		global.GVA_LOG.Error("修改失败!", zap.Error(err))
+		global.GvaLog.Error("修改失败!", zap.Error(err))
 		response.FailWithMessage("修改失败", c)
 		return
 	}
@@ -273,7 +273,7 @@ func (s *SystemApiApi) GetAllApis(c *gin.Context) {
 	authorityID := utils.GetUserAuthorityId(c)
 	apis, err := apiService.GetAllApis(authorityID)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		global.GvaLog.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 		return
 	}
@@ -298,7 +298,7 @@ func (s *SystemApiApi) DeleteApisByIds(c *gin.Context) {
 	}
 	err = apiService.DeleteApisByIds(ids)
 	if err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		global.GvaLog.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败", c)
 		return
 	}
@@ -315,7 +315,7 @@ func (s *SystemApiApi) DeleteApisByIds(c *gin.Context) {
 func (s *SystemApiApi) FreshCasbin(c *gin.Context) {
 	err := casbinService.FreshCasbin()
 	if err != nil {
-		global.GVA_LOG.Error("刷新失败!", zap.Error(err))
+		global.GvaLog.Error("刷新失败!", zap.Error(err))
 		response.FailWithMessage("刷新失败", c)
 		return
 	}

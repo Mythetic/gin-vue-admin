@@ -50,18 +50,18 @@ func Routers() *gin.Engine {
 	// Router.Static("/assets", "./dist/assets")   // dist里面的静态资源
 	// Router.StaticFile("/", "./dist/index.html") // 前端网页入口页面
 
-	Router.StaticFS(global.GVA_CONFIG.Local.StorePath, justFilesFilesystem{http.Dir(global.GVA_CONFIG.Local.StorePath)}) // Router.Use(middleware.LoadTls())  // 如果需要使用https 请打开此中间件 然后前往 core/server.go 将启动模式 更变为 Router.RunTLS("端口","你的cre/pem文件","你的key文件")
+	Router.StaticFS(global.GvaConfig.Local.StorePath, justFilesFilesystem{http.Dir(global.GvaConfig.Local.StorePath)}) // Router.Use(middleware.LoadTls())  // 如果需要使用https 请打开此中间件 然后前往 core/server.go 将启动模式 更变为 Router.RunTLS("端口","你的cre/pem文件","你的key文件")
 	// 跨域，如需跨域可以打开下面的注释
 	// Router.Use(middleware.Cors()) // 直接放行全部跨域请求
 	// Router.Use(middleware.CorsByRules()) // 按照配置的规则放行跨域请求
 	// global.GVA_LOG.Info("use middleware cors")
-	docs.SwaggerInfo.BasePath = global.GVA_CONFIG.System.RouterPrefix
-	Router.GET(global.GVA_CONFIG.System.RouterPrefix+"/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	global.GVA_LOG.Info("register swagger handler")
+	docs.SwaggerInfo.BasePath = global.GvaConfig.System.RouterPrefix
+	Router.GET(global.GvaConfig.System.RouterPrefix+"/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	global.GvaLog.Info("register swagger handler")
 	// 方便统一添加路由组前缀 多服务器上线使用
 
-	PublicGroup := Router.Group(global.GVA_CONFIG.System.RouterPrefix)
-	PrivateGroup := Router.Group(global.GVA_CONFIG.System.RouterPrefix)
+	PublicGroup := Router.Group(global.GvaConfig.System.RouterPrefix)
+	PrivateGroup := Router.Group(global.GvaConfig.System.RouterPrefix)
 
 	PrivateGroup.Use(middleware.JWTAuth()).Use(middleware.CasbinHandler())
 
@@ -102,8 +102,8 @@ func Routers() *gin.Engine {
 	// 注册业务路由
 	initBizRouter(PrivateGroup, PublicGroup)
 
-	global.GVA_ROUTERS = Router.Routes()
+	global.GvaRouters = Router.Routes()
 
-	global.GVA_LOG.Info("router register success")
+	global.GvaLog.Info("router register success")
 	return Router
 }

@@ -56,7 +56,7 @@ func (a *Base) Format(filename string, writer io.Writer, file *ast.File) error {
 
 // RelativePath 绝对路径转相对路径
 func (a *Base) RelativePath(filePath string) string {
-	server := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server)
+	server := filepath.Join(global.GvaConfig.AutoCode.Root, global.GvaConfig.AutoCode.Server)
 	hasServer := strings.Index(filePath, server)
 	if hasServer != -1 {
 		filePath = strings.TrimPrefix(filePath, server)
@@ -68,7 +68,7 @@ func (a *Base) RelativePath(filePath string) string {
 
 // AbsolutePath 相对路径转绝对路径
 func (a *Base) AbsolutePath(filePath string) string {
-	server := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server)
+	server := filepath.Join(global.GvaConfig.AutoCode.Root, global.GvaConfig.AutoCode.Server)
 	keys := strings.Split(filePath, "/")
 	filePath = filepath.Join(keys...)
 	filePath = filepath.Join(server, filePath)

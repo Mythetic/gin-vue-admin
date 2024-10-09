@@ -8,8 +8,8 @@ import (
 )
 
 func Router(engine *gin.Engine) {
-	public := engine.Group(global.GVA_CONFIG.System.RouterPrefix).Group("")
-	private := engine.Group(global.GVA_CONFIG.System.RouterPrefix).Group("")
+	public := engine.Group(global.GvaConfig.System.RouterPrefix).Group("")
+	private := engine.Group(global.GvaConfig.System.RouterPrefix).Group("")
 	private.Use(middleware.JWTAuth()).Use(middleware.CasbinHandler())
 	router.Router.Info.Init(public, private)
 }

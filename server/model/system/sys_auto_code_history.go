@@ -11,7 +11,7 @@ import (
 
 // SysAutoCodeHistory 自动迁移代码记录,用于回滚,重放使用
 type SysAutoCodeHistory struct {
-	global.GVA_MODEL
+	global.GvaModel
 	Table            string             `json:"tableName" gorm:"column:table_name;comment:表名"`
 	Package          string             `json:"package" gorm:"column:package;comment:模块名/插件名"`
 	Request          string             `json:"request" gorm:"type:text;column:request;comment:前端传入的结构化信息"`
@@ -31,7 +31,7 @@ type SysAutoCodeHistory struct {
 func (s *SysAutoCodeHistory) BeforeCreate(db *gorm.DB) error {
 	templates := make(map[string]string, len(s.Templates))
 	for key, value := range s.Templates {
-		server := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server)
+		server := filepath.Join(global.GvaConfig.AutoCode.Root, global.GvaConfig.AutoCode.Server)
 		{
 			hasServer := strings.Index(key, server)
 			if hasServer != -1 {
@@ -40,7 +40,7 @@ func (s *SysAutoCodeHistory) BeforeCreate(db *gorm.DB) error {
 				key = path.Join(keys...)
 			}
 		} // key
-		web := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.WebRoot())
+		web := filepath.Join(global.GvaConfig.AutoCode.Root, global.GvaConfig.AutoCode.WebRoot())
 		hasWeb := strings.Index(value, web)
 		if hasWeb != -1 {
 			value = strings.TrimPrefix(value, web)

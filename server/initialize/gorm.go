@@ -12,30 +12,30 @@ import (
 )
 
 func Gorm() *gorm.DB {
-	switch global.GVA_CONFIG.System.DbType {
+	switch global.GvaConfig.System.DbType {
 	case "mysql":
-		global.GVA_ACTIVE_DBNAME = &global.GVA_CONFIG.Mysql.Dbname
+		global.GvaActiveDbname = &global.GvaConfig.Mysql.Dbname
 		return GormMysql()
 	case "pgsql":
-		global.GVA_ACTIVE_DBNAME = &global.GVA_CONFIG.Pgsql.Dbname
+		global.GvaActiveDbname = &global.GvaConfig.Pgsql.Dbname
 		return GormPgSql()
 	case "oracle":
-		global.GVA_ACTIVE_DBNAME = &global.GVA_CONFIG.Oracle.Dbname
+		global.GvaActiveDbname = &global.GvaConfig.Oracle.Dbname
 		return GormOracle()
 	case "mssql":
-		global.GVA_ACTIVE_DBNAME = &global.GVA_CONFIG.Mssql.Dbname
+		global.GvaActiveDbname = &global.GvaConfig.Mssql.Dbname
 		return GormMssql()
 	case "sqlite":
-		global.GVA_ACTIVE_DBNAME = &global.GVA_CONFIG.Sqlite.Dbname
+		global.GvaActiveDbname = &global.GvaConfig.Sqlite.Dbname
 		return GormSqlite()
 	default:
-		global.GVA_ACTIVE_DBNAME = &global.GVA_CONFIG.Mysql.Dbname
+		global.GvaActiveDbname = &global.GvaConfig.Mysql.Dbname
 		return GormMysql()
 	}
 }
 
 func RegisterTables() {
-	db := global.GVA_DB
+	db := global.GvaDb
 	err := db.AutoMigrate(
 
 		system.SysApi{},
@@ -62,15 +62,15 @@ func RegisterTables() {
 		example.ExaFileUploadAndDownload{},
 	)
 	if err != nil {
-		global.GVA_LOG.Error("register table failed", zap.Error(err))
+		global.GvaLog.Error("register table failed", zap.Error(err))
 		os.Exit(0)
 	}
 
 	err = bizModel()
 
 	if err != nil {
-		global.GVA_LOG.Error("register biz_table failed", zap.Error(err))
+		global.GvaLog.Error("register biz_table failed", zap.Error(err))
 		os.Exit(0)
 	}
-	global.GVA_LOG.Info("register table success")
+	global.GvaLog.Info("register table success")
 }

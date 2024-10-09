@@ -26,28 +26,28 @@ var SysExportTemplateServiceApp = new(SysExportTemplateService)
 // CreateSysExportTemplate 创建导出模板记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (sysExportTemplateService *SysExportTemplateService) CreateSysExportTemplate(sysExportTemplate *system.SysExportTemplate) (err error) {
-	err = global.GVA_DB.Create(sysExportTemplate).Error
+	err = global.GvaDb.Create(sysExportTemplate).Error
 	return err
 }
 
 // DeleteSysExportTemplate 删除导出模板记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (sysExportTemplateService *SysExportTemplateService) DeleteSysExportTemplate(sysExportTemplate system.SysExportTemplate) (err error) {
-	err = global.GVA_DB.Delete(&sysExportTemplate).Error
+	err = global.GvaDb.Delete(&sysExportTemplate).Error
 	return err
 }
 
 // DeleteSysExportTemplateByIds 批量删除导出模板记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (sysExportTemplateService *SysExportTemplateService) DeleteSysExportTemplateByIds(ids request.IdsReq) (err error) {
-	err = global.GVA_DB.Delete(&[]system.SysExportTemplate{}, "id in ?", ids.Ids).Error
+	err = global.GvaDb.Delete(&[]system.SysExportTemplate{}, "id in ?", ids.Ids).Error
 	return err
 }
 
 // UpdateSysExportTemplate 更新导出模板记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (sysExportTemplateService *SysExportTemplateService) UpdateSysExportTemplate(sysExportTemplate system.SysExportTemplate) (err error) {
-	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+	return global.GvaDb.Transaction(func(tx *gorm.DB) error {
 		conditions := sysExportTemplate.Conditions
 		e := tx.Delete(&[]system.Condition{}, "template_id = ?", sysExportTemplate.TemplateID).Error
 		if e != nil {
@@ -85,7 +85,7 @@ func (sysExportTemplateService *SysExportTemplateService) UpdateSysExportTemplat
 // GetSysExportTemplate 根据id获取导出模板记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (sysExportTemplateService *SysExportTemplateService) GetSysExportTemplate(id uint) (sysExportTemplate system.SysExportTemplate, err error) {
-	err = global.GVA_DB.Where("id = ?", id).Preload("JoinTemplate").Preload("Conditions").First(&sysExportTemplate).Error
+	err = global.GvaDb.Where("id = ?", id).Preload("JoinTemplate").Preload("Conditions").First(&sysExportTemplate).Error
 	return
 }
 
@@ -95,7 +95,7 @@ func (sysExportTemplateService *SysExportTemplateService) GetSysExportTemplateIn
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
-	db := global.GVA_DB.Model(&system.SysExportTemplate{})
+	db := global.GvaDb.Model(&system.SysExportTemplate{})
 	var sysExportTemplates []system.SysExportTemplate
 	// 如果有条件搜索 下方会自动创建搜索语句
 	if info.StartCreatedAt != nil && info.EndCreatedAt != nil {
@@ -127,7 +127,7 @@ func (sysExportTemplateService *SysExportTemplateService) GetSysExportTemplateIn
 // Author [piexlmax](https://github.com/piexlmax)
 func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID string, values url.Values) (file *bytes.Buffer, name string, err error) {
 	var template system.SysExportTemplate
-	err = global.GVA_DB.Preload("Conditions").Preload("JoinTemplate").First(&template, "template_id = ?", templateID).Error
+	err = global.GvaDb.Preload("Conditions").Preload("JoinTemplate").First(&template, "template_id = ?", templateID).Error
 	if err != nil {
 		return nil, "", err
 	}
@@ -161,7 +161,7 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID
 
 	selects := strings.Join(selectKeyFmt, ", ")
 	var tableMap []map[string]interface{}
-	db := global.GVA_DB
+	db := global.GvaDb
 	if template.DBName != "" {
 		db = global.MustGetGlobalDBByDBName(template.DBName)
 	}
@@ -297,7 +297,7 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID
 // Author [piexlmax](https://github.com/piexlmax)
 func (sysExportTemplateService *SysExportTemplateService) ExportTemplate(templateID string) (file *bytes.Buffer, name string, err error) {
 	var template system.SysExportTemplate
-	err = global.GVA_DB.First(&template, "template_id = ?", templateID).Error
+	err = global.GvaDb.First(&template, "template_id = ?", templateID).Error
 	if err != nil {
 		return nil, "", err
 	}
@@ -345,7 +345,7 @@ func (sysExportTemplateService *SysExportTemplateService) ExportTemplate(templat
 // Author [piexlmax](https://github.com/piexlmax)
 func (sysExportTemplateService *SysExportTemplateService) ImportExcel(templateID string, file *multipart.FileHeader) (err error) {
 	var template system.SysExportTemplate
-	err = global.GVA_DB.First(&template, "template_id = ?", templateID).Error
+	err = global.GvaDb.First(&template, "template_id = ?", templateID).Error
 	if err != nil {
 		return err
 	}
@@ -377,7 +377,7 @@ func (sysExportTemplateService *SysExportTemplateService) ImportExcel(templateID
 		titleKeyMap[title] = key
 	}
 
-	db := global.GVA_DB
+	db := global.GvaDb
 	if template.DBName != "" {
 		db = global.MustGetGlobalDBByDBName(template.DBName)
 	}

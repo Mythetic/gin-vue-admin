@@ -22,9 +22,9 @@ func (a *autoCodeSqlite) GetDB(businessDB string) (data []response.Db, err error
 		File string `gorm:"column:file"`
 	}
 	if businessDB == "" {
-		err = global.GVA_DB.Raw(sql).Find(&databaseList).Error
+		err = global.GvaDb.Raw(sql).Find(&databaseList).Error
 	} else {
-		err = global.GVA_DBList[businessDB].Raw(sql).Find(&databaseList).Error
+		err = global.GvaDbList[businessDB].Raw(sql).Find(&databaseList).Error
 	}
 	for _, database := range databaseList {
 		if database.File != "" {
@@ -47,9 +47,9 @@ func (a *autoCodeSqlite) GetTables(businessDB string, dbName string) (data []res
 	sql := `SELECT name FROM sqlite_master WHERE type='table'`
 	tabelNames := []string{}
 	if businessDB == "" {
-		err = global.GVA_DB.Raw(sql).Find(&tabelNames).Error
+		err = global.GvaDb.Raw(sql).Find(&tabelNames).Error
 	} else {
-		err = global.GVA_DBList[businessDB].Raw(sql).Find(&tabelNames).Error
+		err = global.GvaDbList[businessDB].Raw(sql).Find(&tabelNames).Error
 	}
 	for _, tabelName := range tabelNames {
 		entities = append(entities, response.Table{tabelName})
@@ -69,9 +69,9 @@ func (a *autoCodeSqlite) GetColumn(businessDB string, tableName string, dbName s
 		Pk   int    `gorm:"column:pk"`
 	}
 	if businessDB == "" {
-		err = global.GVA_DB.Raw(sql).Scan(&columnInfos).Error
+		err = global.GvaDb.Raw(sql).Scan(&columnInfos).Error
 	} else {
-		err = global.GVA_DBList[businessDB].Raw(sql).Scan(&columnInfos).Error
+		err = global.GvaDbList[businessDB].Raw(sql).Scan(&columnInfos).Error
 	}
 	for _, columnInfo := range columnInfos {
 		entities = append(entities, response.Column{

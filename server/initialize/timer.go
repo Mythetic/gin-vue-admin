@@ -14,8 +14,8 @@ func Timer() {
 		var option []cron.Option
 		option = append(option, cron.WithSeconds())
 		// 清理DB定时任务
-		_, err := global.GVA_Timer.AddTaskByFunc("ClearDB", "@daily", func() {
-			err := task.ClearTable(global.GVA_DB) // 定时任务方法定在task文件包中
+		_, err := global.GvaTimer.AddTaskByFunc("ClearDB", "@daily", func() {
+			err := task.ClearTable(global.GvaDb) // 定时任务方法定在task文件包中
 			if err != nil {
 				fmt.Println("timer error:", err)
 			}

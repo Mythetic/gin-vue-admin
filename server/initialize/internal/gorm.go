@@ -19,19 +19,19 @@ type _gorm struct{}
 // Author [SliverHorn](https://github.com/SliverHorn)
 func (g *_gorm) Config(prefix string, singular bool) *gorm.Config {
 	var general config.GeneralDB
-	switch global.GVA_CONFIG.System.DbType {
+	switch global.GvaConfig.System.DbType {
 	case "mysql":
-		general = global.GVA_CONFIG.Mysql.GeneralDB
+		general = global.GvaConfig.Mysql.GeneralDB
 	case "pgsql":
-		general = global.GVA_CONFIG.Pgsql.GeneralDB
+		general = global.GvaConfig.Pgsql.GeneralDB
 	case "oracle":
-		general = global.GVA_CONFIG.Oracle.GeneralDB
+		general = global.GvaConfig.Oracle.GeneralDB
 	case "sqlite":
-		general = global.GVA_CONFIG.Sqlite.GeneralDB
+		general = global.GvaConfig.Sqlite.GeneralDB
 	case "mssql":
-		general = global.GVA_CONFIG.Mssql.GeneralDB
+		general = global.GvaConfig.Mssql.GeneralDB
 	default:
-		general = global.GVA_CONFIG.Mysql.GeneralDB
+		general = global.GvaConfig.Mysql.GeneralDB
 	}
 	return &gorm.Config{
 		Logger: logger.New(NewWriter(general, log.New(os.Stdout, "\r\n", log.LstdFlags)), logger.Config{

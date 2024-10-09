@@ -22,35 +22,35 @@ import (
 )
 
 var (
-	GVA_DB        *gorm.DB
-	GVA_DBList    map[string]*gorm.DB
-	GVA_REDIS     redis.UniversalClient
-	GVA_REDISList map[string]redis.UniversalClient
-	GVA_MONGO     *qmgo.QmgoClient
-	GVA_CONFIG    config.Server
-	GVA_VP        *viper.Viper
-	// GVA_LOG    *oplogging.Logger
-	GVA_LOG                 *zap.Logger
-	GVA_Timer               timer.Timer = timer.NewTimerTask()
-	GVA_Concurrency_Control             = &singleflight.Group{}
-	GVA_ROUTERS             gin.RoutesInfo
-	GVA_ACTIVE_DBNAME       *string
-	BlackCache              local_cache.Cache
-	lock                    sync.RWMutex
+	GvaDb        *gorm.DB
+	GvaDbList    map[string]*gorm.DB
+	GvaRedis     redis.UniversalClient
+	GvaRedisList map[string]redis.UniversalClient
+	GvaMongo     *qmgo.QmgoClient
+	GvaConfig    config.Server
+	GvaVp        *viper.Viper
+	// GvaLog    *logging.Logger
+	GvaLog                *zap.Logger
+	GvaTimer              = timer.NewTimerTask()
+	GvaConcurrencyControl = &singleflight.Group{}
+	GvaRouters            gin.RoutesInfo
+	GvaActiveDbname       *string
+	BlackCache            local_cache.Cache
+	lock                  sync.RWMutex
 )
 
 // GetGlobalDBByDBName 通过名称获取db list中的db
 func GetGlobalDBByDBName(dbname string) *gorm.DB {
 	lock.RLock()
 	defer lock.RUnlock()
-	return GVA_DBList[dbname]
+	return GvaDbList[dbname]
 }
 
 // MustGetGlobalDBByDBName 通过名称获取db 如果不存在则panic
 func MustGetGlobalDBByDBName(dbname string) *gorm.DB {
 	lock.RLock()
 	defer lock.RUnlock()
-	db, ok := GVA_DBList[dbname]
+	db, ok := GvaDbList[dbname]
 	if !ok || db == nil {
 		panic("db no init")
 	}
@@ -58,7 +58,7 @@ func MustGetGlobalDBByDBName(dbname string) *gorm.DB {
 }
 
 func GetRedis(name string) redis.UniversalClient {
-	redis, ok := GVA_REDISList[name]
+	redis, ok := GvaRedisList[name]
 	if !ok || redis == nil {
 		panic(fmt.Sprintf("redis `%s` no init", name))
 	}

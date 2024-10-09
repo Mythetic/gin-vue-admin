@@ -36,18 +36,18 @@ func (a *AuthorityApi) CreateAuthority(c *gin.Context) {
 		return
 	}
 
-	if *authority.ParentId == 0 && global.GVA_CONFIG.System.UseStrictAuth {
+	if *authority.ParentId == 0 && global.GvaConfig.System.UseStrictAuth {
 		authority.ParentId = utils.Pointer(utils.GetUserAuthorityId(c))
 	}
 
 	if authBack, err = authorityService.CreateAuthority(authority); err != nil {
-		global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		global.GvaLog.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败"+err.Error(), c)
 		return
 	}
 	err = casbinService.FreshCasbin()
 	if err != nil {
-		global.GVA_LOG.Error("创建成功，权限刷新失败。", zap.Error(err))
+		global.GvaLog.Error("创建成功，权限刷新失败。", zap.Error(err))
 		response.FailWithMessage("创建成功，权限刷新失败。"+err.Error(), c)
 		return
 	}
@@ -83,7 +83,7 @@ func (a *AuthorityApi) CopyAuthority(c *gin.Context) {
 	adminAuthorityID := utils.GetUserAuthorityId(c)
 	authBack, err := authorityService.CopyAuthority(adminAuthorityID, copyInfo)
 	if err != nil {
-		global.GVA_LOG.Error("拷贝失败!", zap.Error(err))
+		global.GvaLog.Error("拷贝失败!", zap.Error(err))
 		response.FailWithMessage("拷贝失败"+err.Error(), c)
 		return
 	}
@@ -112,7 +112,7 @@ func (a *AuthorityApi) DeleteAuthority(c *gin.Context) {
 	}
 	// 删除角色之前需要判断是否有用户正在使用此角色
 	if err = authorityService.DeleteAuthority(&authority); err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		global.GvaLog.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败"+err.Error(), c)
 		return
 	}
@@ -143,7 +143,7 @@ func (a *AuthorityApi) UpdateAuthority(c *gin.Context) {
 	}
 	authority, err := authorityService.UpdateAuthority(auth)
 	if err != nil {
-		global.GVA_LOG.Error("更新失败!", zap.Error(err))
+		global.GvaLog.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败"+err.Error(), c)
 		return
 	}
@@ -163,7 +163,7 @@ func (a *AuthorityApi) GetAuthorityList(c *gin.Context) {
 	authorityID := utils.GetUserAuthorityId(c)
 	list, err := authorityService.GetAuthorityInfoList(authorityID)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		global.GvaLog.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败"+err.Error(), c)
 		return
 	}
@@ -194,7 +194,7 @@ func (a *AuthorityApi) SetDataAuthority(c *gin.Context) {
 	adminAuthorityID := utils.GetUserAuthorityId(c)
 	err = authorityService.SetDataAuthority(adminAuthorityID, auth)
 	if err != nil {
-		global.GVA_LOG.Error("设置失败!", zap.Error(err))
+		global.GvaLog.Error("设置失败!", zap.Error(err))
 		response.FailWithMessage("设置失败"+err.Error(), c)
 		return
 	}

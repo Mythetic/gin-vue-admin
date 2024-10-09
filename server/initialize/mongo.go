@@ -41,28 +41,28 @@ func (m *mongo) Indexes(ctx context.Context) error {
 
 func (m *mongo) Initialization() error {
 	var opts []options.ClientOptions
-	if global.GVA_CONFIG.Mongo.IsZap {
+	if global.GvaConfig.Mongo.IsZap {
 		opts = internal.Mongo.GetClientOptions()
 	}
 	ctx := context.Background()
 	client, err := qmgo.Open(ctx, &qmgo.Config{
-		Uri:              global.GVA_CONFIG.Mongo.Uri(),
-		Coll:             global.GVA_CONFIG.Mongo.Coll,
-		Database:         global.GVA_CONFIG.Mongo.Database,
-		MinPoolSize:      &global.GVA_CONFIG.Mongo.MinPoolSize,
-		MaxPoolSize:      &global.GVA_CONFIG.Mongo.MaxPoolSize,
-		SocketTimeoutMS:  &global.GVA_CONFIG.Mongo.SocketTimeoutMs,
-		ConnectTimeoutMS: &global.GVA_CONFIG.Mongo.ConnectTimeoutMs,
+		Uri:              global.GvaConfig.Mongo.Uri(),
+		Coll:             global.GvaConfig.Mongo.Coll,
+		Database:         global.GvaConfig.Mongo.Database,
+		MinPoolSize:      &global.GvaConfig.Mongo.MinPoolSize,
+		MaxPoolSize:      &global.GvaConfig.Mongo.MaxPoolSize,
+		SocketTimeoutMS:  &global.GvaConfig.Mongo.SocketTimeoutMs,
+		ConnectTimeoutMS: &global.GvaConfig.Mongo.ConnectTimeoutMs,
 		Auth: &qmgo.Credential{
-			Username:   global.GVA_CONFIG.Mongo.Username,
-			Password:   global.GVA_CONFIG.Mongo.Password,
-			AuthSource: global.GVA_CONFIG.Mongo.AuthSource,
+			Username:   global.GvaConfig.Mongo.Username,
+			Password:   global.GvaConfig.Mongo.Password,
+			AuthSource: global.GvaConfig.Mongo.AuthSource,
 		},
 	}, opts...)
 	if err != nil {
 		return errors.Wrap(err, "链接mongodb数据库失败!")
 	}
-	global.GVA_MONGO = client
+	global.GvaMongo = client
 	err = m.Indexes(ctx)
 	if err != nil {
 		return err
@@ -71,7 +71,7 @@ func (m *mongo) Initialization() error {
 }
 
 func (m *mongo) CreateIndexes(ctx context.Context, name string, indexes [][]string) error {
-	collection, err := global.GVA_MONGO.Database.Collection(name).CloneCollection()
+	collection, err := global.GvaMongo.Database.Collection(name).CloneCollection()
 	if err != nil {
 		return errors.Wrapf(err, "获取[%s]的表对象失败!", name)
 	}
@@ -128,7 +128,7 @@ func (m *mongo) CreateIndexes(ctx context.Context, name string, indexes [][]stri
 			continue
 		} // 索引存在
 		if len(fmt.Sprintf("%s.%s.$%s", collection.Name(), name, v1)) > 127 {
-			err = global.GVA_MONGO.Database.Collection(name).CreateOneIndex(ctx, options.IndexModel{
+			err = global.GvaMongo.Database.Collection(name).CreateOneIndex(ctx, options.IndexModel{
 				Key:          v1,
 				IndexOptions: option.Index().SetName(utils.MD5V([]byte(k1))),
 				// IndexOptions: option.Index().SetName(utils.MD5V([]byte(k1))).SetExpireAfterSeconds(86400), // SetExpireAfterSeconds(86400) 设置索引过期时间, 86400 = 1天
@@ -138,7 +138,7 @@ func (m *mongo) CreateIndexes(ctx context.Context, name string, indexes [][]stri
 			}
 			return nil
 		}
-		err = global.GVA_MONGO.Database.Collection(name).CreateOneIndex(ctx, options.IndexModel{
+		err = global.GvaMongo.Database.Collection(name).CreateOneIndex(ctx, options.IndexModel{
 			Key:          v1,
 			IndexOptions: option.Index().SetExpireAfterSeconds(86400),
 			// IndexOptions: option.Index().SetName(utils.MD5V([]byte(k1))).SetExpireAfterSeconds(86400), // SetExpireAfterSeconds(86400) 设置索引过期时间(秒), 86400 = 1天

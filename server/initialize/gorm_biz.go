@@ -5,7 +5,7 @@ import (
 )
 
 func bizModel() error {
-	db := global.GVA_DB
+	db := global.GvaDb
 	err := db.AutoMigrate()
 	if err != nil {
 		return err
